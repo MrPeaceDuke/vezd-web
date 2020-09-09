@@ -108,7 +108,6 @@ const Place = ({ item, order, onIncrementPosition, onDecrementPosition, area }) 
         )))}
       </ul>
       <footer className="Place__footer">
-		{/* Place__order */}
 		<Link to={urlTask} className={classLink}>
 		Оформить заказ ({price})
 		</Link>

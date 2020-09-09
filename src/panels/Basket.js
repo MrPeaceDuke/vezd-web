@@ -1,27 +1,26 @@
 import React, { useMemo, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import accounting from 'accounting';
-import TimeField from 'react-simple-timefield';
 import Checkbox from './Checkbox';
-
+import TimeField from 'react-simple-timefield';
 import edit from '../img/edit.svg';
 import './place.css';
 
 
 const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
-  const [ faster, setFaster ] = useState(true);
-  const [ time, setTime ] = useState('');
-  const [ selfService, setSelfService ] = useState(false);
+  
   const area = foodAreas.filter(area => area.id === areaId)[0];
   const item = area.items.filter(item => item.id === itemId)[0];
 
+  const [ selfService, setSelfService ] = useState(item.setTempType || false);
+  const [ time, setTime ] = useState(item.setOrderTime || '');
+  const [ faster, setFaster ] = useState(item.setTypeTime || false);
+
   const [ price, products ] = useMemo(() => {
     const foodIds = new Set((item.foods || []).map(item => item.id));
-
     const products = Object.values(order)
       .filter((value) => {
         const { item: { id }} = value;
-
         return foodIds.has(id);
       });
 
@@ -98,7 +97,12 @@ const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
         </ul>
         <Link
           className="Place__change-product"
-          to={`/place/${areaId}/${itemId}`}
+		  to={`/place/${areaId}/${itemId}`}
+		  onClick={() => {
+			item.setTempType = selfService;
+			item.setOrderTime = time;
+			item.setTypeTime = faster;
+		  }}
         >
           Изменить
         </Link>
@@ -111,10 +115,10 @@ const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
             checked={faster} 
             onToggle={() => {
               if (faster) {
-                setFaster(false);
+				setFaster(false);
               } else {
-                setTime('');
-                setFaster(true);
+                setTime('00:00');
+				setFaster(true);
               }
             }}
           />
@@ -122,18 +126,29 @@ const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
         <div className="Place__choice-item">
           <span>Назначить</span>
 		  <TimeField
-				value={time}
-				input={<input />} 
-				colon=":"
-			/>
+			value={time}
+			onChange={(event, value) => {
+				setTime(value);
+			}}
+			input={<input />}  
+			colon=":"
+		/>
         </div>
         <div className="Place__choice-item">
           <h3>С собой</h3>
-          <Checkbox checked={selfService} onToggle={() => setSelfService(!selfService)} />
+		  <Checkbox checked={selfService} onToggle={() => {
+			  setSelfService(!selfService);
+			  item.setTempType = selfService;
+		  }
+		} />
         </div>
         <div className="Place__choice-item">
           <h3>На месте</h3>
-          <Checkbox checked={!selfService} onToggle={() => setSelfService(!setSelfService)} />
+          <Checkbox checked={!selfService} onToggle={() => {
+			  setSelfService(!selfService);
+			  item.setTempType = selfService;
+		  }
+		} />
         </div>
       </div>
       <footer className="Place__footer">
@@ -143,6 +158,12 @@ const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
       </footer>
     </div>
   );
+};
+
+Basket.defaultProps = {
+	setTempType: () => {},
+	setOrderTime: () => {},
+	setTypeTime: () => {},
 };
 
 export default withRouter(Basket);

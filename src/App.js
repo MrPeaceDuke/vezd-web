@@ -152,6 +152,15 @@ const App = () => {
 					<Basket
 						foodAreas={FOOD_AREAS}
 						order={order}
+						setTempType={({ selfService }) => {
+							order.selfService = selfService
+						}}
+						setOrderTime={({ time }) => {
+							order.setOrderTime = time
+						}}
+						setTypeTime={({typeTime})=>{
+							order.setTypeTime = typeTime
+						}}
 					/>
 				</Route>
 				<Route

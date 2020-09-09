@@ -5,10 +5,9 @@ import edit from '../img/edit.svg';
 import './place.css';
 
 
-const Order = ({ match: { params: { areaId, itemId }}, history, foodAreas, setActiveOrder }) => {
+const Order = ({ match: { params: { areaId, itemId }}, history, foodAreas, setActiveOrder, setOrderTime, setTempType, setTypeTime }) => {
   const area = foodAreas.filter(area => area.id === areaId)[0];
   const item = area.items.filter(item => item.id === itemId)[0];
-
   return (
     <div className="Place Place_order">
       <header className="Place__header">
@@ -76,6 +75,7 @@ const Order = ({ match: { params: { areaId, itemId }}, history, foodAreas, setAc
 
 Order.defaultProps = {
   setActiveOrder: () => {},
+  setTempType: () => {},
 };
 
 export default withRouter(Order);
