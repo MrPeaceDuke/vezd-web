@@ -26,8 +26,13 @@ const Place = ({ item, order, onIncrementPosition, onDecrementPosition, area }) 
 
     return accounting.formatNumber(result, 0, ' ');
   }, [ order, item ]);
+  var classLink = "Place__order__disabled";
   var urlTask = '/';
-  if(price > 0) urlTask = `/basket/${area.id}/${item.id}`;
+  if(price > 0)
+  {
+	urlTask = `/basket/${area.id}/${item.id}`;
+	classLink = "Place__order";
+  }
   return (
     <div className="Place">
       <header className="Place__header">
@@ -103,8 +108,8 @@ const Place = ({ item, order, onIncrementPosition, onDecrementPosition, area }) 
         )))}
       </ul>
       <footer className="Place__footer">
-		
-		<Link to={urlTask} className="Place__order disabled-link">
+		{/* Place__order */}
+		<Link to={urlTask} className={classLink}>
 		Оформить заказ ({price})
 		</Link>
         

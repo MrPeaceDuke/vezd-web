@@ -164,6 +164,19 @@
   background-color: #4bb34b;
   color: #fff;
 }
+.Place__order__disabled {
+	flex-grow: 1;
+	height: 65px;
+	border: 0;
+	border-radius: 25px;
+	line-height: 60px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 22px;
+	background-color: #AFAFAF;
+	color: #fff;
+	pointer-events: none;
+  }
 
 .Place__products-wrapper {
   position: relative;
